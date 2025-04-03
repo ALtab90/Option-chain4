@@ -1,0 +1,1168 @@
+/* Global Styles */
+:root {
+    --primary-color: #4a6cfa;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --purple-color: #6f42c1;
+    --light-bg: #f8f9fa;
+    --dark-bg: #343a40;
+    --light-text: #f8f9fa;
+    --dark-text: #343a40;
+    --border-color: #dee2e6;
+    --call-color: #28a745;
+    --put-color: #dc3545;
+    --high-volume-color: #ffd700;
+    --medium-volume-color: #fff7cc;
+    --high-oi-change-color: #ffd700;
+    --medium-oi-change-color: #fff7cc;
+    --trend-up-color: #28a745;
+    --trend-down-color: #dc3545;
+    --itm-bg-color: #e3f1e9;
+    --itm-put-bg-color: #f9e7e9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+    background-color: var(--dark-bg);
+    color: var(--light-text);
+}
+
+/* Utility Classes */
+.text-success {
+    color: var(--success-color);
+}
+
+.text-danger {
+    color: var(--danger-color);
+}
+
+.green {
+    color: var(--success-color);
+}
+
+.red {
+    color: var(--danger-color);
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Header Styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--light-bg);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    width: 100%;
+    height: 80px; /* Fixed height for header */
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.index-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.index-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.change-value {
+    font-size: 0.9rem;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--dark-text);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.dark-mode .theme-toggle {
+    color: var(--light-text);
+}
+
+.theme-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .theme-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Select Inputs */
+select, button {
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background-color: white;
+    cursor: pointer;
+}
+
+.dark-mode select, .dark-mode button {
+    background-color: var(--dark-bg);
+    color: var(--light-text);
+    border-color: #495057;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #3a5fd9;
+}
+
+/* Main Content Area */
+main {
+    flex: 1;
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    margin-top: 0;
+    height: calc(100vh - 80px); /* Adjust based on header height */
+}
+
+/* Options Chain Table */
+.options-chain-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    position: relative;
+    transform-origin: center top;
+    display: flex;
+    justify-content: center;
+    scroll-behavior: smooth; /* Smooth scrolling for user interactions */
+}
+
+/* Improve scrollbar visibility */
+.options-chain-container::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+}
+
+.options-chain-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.options-chain-container::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.dark-mode .options-chain-container::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.dark-mode .options-chain-container::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.options-chain-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1rem;
+    position: relative;
+    min-width: 1200px; /* Minimum width to ensure all columns are visible */
+    table-layout: fixed; /* Equal width columns */
+    transition: none; /* Remove transition to prevent issues when zooming */
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+}
+
+.options-chain-table th, 
+.options-chain-table td {
+    transition: padding 0.3s ease, font-size 0.3s ease;
+}
+
+.options-chain-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 15;
+    background-color: var(--light-bg);
+}
+
+.dark-mode .options-chain-table thead {
+    background-color: var(--dark-bg);
+}
+
+/* Add a second sticky row for the second header row */
+.options-chain-table thead tr:nth-child(1) {
+    position: sticky;
+    top: 0;
+    z-index: 16;
+    background-color: var(--light-bg);
+}
+
+.options-chain-table thead tr:nth-child(2) {
+    position: sticky;
+    top: 41px; /* Adjust based on first row height */
+    z-index: 15;
+    background-color: var(--light-bg);
+}
+
+.dark-mode .options-chain-table thead tr:nth-child(1),
+.dark-mode .options-chain-table thead tr:nth-child(2) {
+    background-color: var(--dark-bg);
+}
+
+/* Shadow for the sticky header to show separation */
+.options-chain-table thead::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -5px;
+    height: 5px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1), transparent);
+    pointer-events: none;
+}
+
+.options-chain-table th {
+    padding: 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    color: var(--dark-text);
+    border-bottom: 2px solid var(--border-color);
+    white-space: nowrap;
+    position: relative;
+    font-size: 0.8rem;
+}
+
+.dark-mode .options-chain-table th {
+    color: var(--light-text);
+    border-bottom-color: #495057;
+}
+
+.options-chain-table td {
+    padding: 0.4rem;
+    border: 1px solid var(--border-color);
+    font-size: 0.75rem; /* Smaller font size for numbers */
+    text-align: right;
+}
+
+.dark-mode .options-chain-table th, 
+.dark-mode .options-chain-table td {
+    border-color: #495057;
+}
+
+/* Strike price column should be wider and bolder */
+.options-chain-table th:nth-child(10) {
+    font-weight: bold;
+    width: 7%;
+}
+
+/* Reset media queries to prevent conflicts */
+@media (max-width: 1400px) {
+    .options-chain-table th, .options-chain-table td {
+        padding: 0.35rem;
+        font-size: 0.72rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .options-chain-container {
+        margin: 0 -1rem;
+        width: calc(100% + 2rem);
+    }
+}
+
+.call-header, .put-header, .strike-header {
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 0.6rem 0.4rem !important;
+    height: 40px; /* Fixed height for first header row */
+}
+
+/* Add specific styles for column headers in the second row */
+.options-chain-table thead tr:nth-child(2) th {
+    height: 42px; /* Fixed height for second header row */
+    padding-top: 0.7rem !important;
+    padding-bottom: 0.7rem !important;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.05);
+}
+
+/* Remove any transitions that could interfere with the sticky behavior */
+.options-chain-container, 
+.options-chain-table,
+.options-chain-table thead,
+.options-chain-table th,
+.options-chain-table tr {
+    transition: none;
+}
+
+/* Ensure table headers have background color even during scroll */
+.options-chain-table thead tr th {
+    background-color: var(--light-bg);
+}
+
+.dark-mode .options-chain-table thead tr th {
+    background-color: var(--dark-bg);
+}
+
+/* Ensure the call/put/strike header backgrounds are visible */
+.options-chain-table thead tr:nth-child(1) .call-header {
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+.options-chain-table thead tr:nth-child(1) .put-header {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.dark-mode .options-chain-table thead tr:nth-child(1) .call-header {
+    background-color: rgba(40, 167, 69, 0.2);
+}
+
+.dark-mode .options-chain-table thead tr:nth-child(1) .put-header {
+    background-color: rgba(220, 53, 69, 0.2);
+}
+
+/* Strike Price Styles - Clean, focused styling */
+.strike-price {
+    font-weight: bold;
+    background-color: rgba(59, 130, 246, 0.25) !important;
+    text-align: center;
+    color: #1e3a8a;
+    border: 1px solid rgba(59, 130, 246, 0.4) !important;
+    box-shadow: 0 0 4px rgba(59, 130, 246, 0.2);
+    position: relative;
+    z-index: 1;
+    font-size: 0.82rem;
+}
+
+.dark-mode .strike-price {
+    background-color: rgba(59, 130, 246, 0.3) !important;
+    color: #dbeafe;
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    box-shadow: 0 0 4px rgba(59, 130, 246, 0.3);
+}
+
+/* Allow number alignment but keep headers centered */
+.options-chain-table th {
+    text-align: center;
+}
+
+.options-chain-table td {
+    text-align: right;
+}
+
+/* ITM Styles - Make colors more visible but ensure text is readable */
+td.call-itm {
+    background-color: rgba(40, 167, 69, 0.08) !important;
+}
+
+td.put-itm {
+    background-color: rgba(220, 53, 69, 0.08) !important;
+}
+
+/* Strike price that is ITM */
+.strike-price.call-itm {
+    background-color: rgba(40, 167, 69, 0.15) !important;
+    font-weight: bold;
+    color: #000000;
+}
+
+.strike-price.put-itm {
+    background-color: rgba(220, 53, 69, 0.15) !important;
+    font-weight: bold;
+    color: #000000;
+}
+
+/* Dark mode adjustments */
+.dark-mode td.call-itm {
+    background-color: rgba(40, 167, 69, 0.12) !important;
+    color: #e9ecef;
+}
+
+.dark-mode td.put-itm {
+    background-color: rgba(220, 53, 69, 0.12) !important;
+    color: #e9ecef;
+}
+
+.dark-mode .strike-price.call-itm {
+    background-color: rgba(40, 167, 69, 0.2) !important;
+    color: #ffffff;
+}
+
+.dark-mode .strike-price.put-itm {
+    background-color: rgba(220, 53, 69, 0.2) !important;
+    color: #ffffff;
+}
+
+/* Style for highest value (100%) - Make dark yellow */
+.high-volume, .high-oi-change {
+    background-color: #ffd700 !important; /* Dark yellow */
+    color: #000 !important;
+    font-weight: bold;
+    border: 1px solid #e6c200 !important;
+    z-index: 7;
+    position: relative;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Style for second highest value (75% or above) - Make light yellow */
+.medium-volume, .medium-oi-change {
+    background-color: #fff7cc !important; /* Light yellow */
+    color: #000 !important;
+    border: 1px solid #ffecb3 !important;
+    z-index: 6;
+    position: relative;
+}
+
+/* Ensure in-the-money cells don't obscure volume highlighting */
+td.call-itm.high-volume, td.call-itm.high-oi-change,
+td.put-itm.high-volume, td.put-itm.high-oi-change {
+    background-color: #ffd700 !important; /* Always show dark yellow on top */
+    color: #000 !important;
+    position: relative;
+    z-index: 7;
+}
+
+td.call-itm.medium-volume, td.call-itm.medium-oi-change,
+td.put-itm.medium-volume, td.put-itm.medium-oi-change {
+    background-color: #fff7cc !important; /* Always show light yellow on top */
+    color: #000 !important;
+    position: relative;
+    z-index: 6;
+}
+
+/* ATM Red Line Styles - Center the line properly */
+tr.atm-border {
+    position: relative;
+}
+
+/* Remove all border-related styles */
+.options-chain-table tr.atm-border::before {
+    display: none !important;
+}
+
+.options-chain-table tr.atm-border {
+    z-index: 5; /* Normal z-index to not interfere with other elements */
+    transform: none !important; /* Prevent any transformations */
+    transition: none !important; /* Disable transitions */
+}
+
+/* Remove specific border style code */
+.dark-mode tr.atm-border::after {
+    display: none !important;
+}
+
+/* Trend Indicators */
+.trend-indicator-up {
+    color: var(--trend-up-color);
+    font-size: 0.9em;
+    margin-left: 0.25rem;
+    display: inline-block;
+    position: relative;
+}
+
+.trend-indicator-down {
+    color: var(--trend-down-color);
+    font-size: 0.9em;
+    margin-left: 0.25rem;
+    display: inline-block;
+    position: relative;
+}
+
+/* Graph Container */
+.graph-container {
+    margin-top: 1rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 1200px;
+    height: 500px;
+}
+
+.dark-mode .graph-container {
+    background-color: #2c3034;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.graph-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.graph-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--dark-text);
+}
+
+.dark-mode .graph-title {
+    color: var(--light-text);
+}
+
+.close-graph-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--secondary-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.close-graph-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .close-graph-btn {
+    color: var(--light-text);
+}
+
+.dark-mode .close-graph-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.graph-canvas-container {
+    height: calc(100% - 70px);
+    width: 100%;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Historical Data Drawer */
+.drawer {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+    z-index: 1000;
+}
+
+.dark-mode .drawer {
+    background-color: var(--dark-bg);
+}
+
+.drawer.open {
+    right: 0;
+}
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.close-drawer-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--secondary-color);
+}
+
+.dark-mode .close-drawer-btn {
+    color: var(--light-text);
+}
+
+.drawer-content {
+    padding: 1rem;
+}
+
+.historical-controls {
+    margin-bottom: 1.5rem;
+}
+
+.control-group {
+    margin-bottom: 1rem;
+}
+
+.control-group label {
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+/* Playback Controls */
+.btn {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-warning {
+    background-color: var(--warning-color);
+    color: black;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+/* Time slider */
+#timeSlider {
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.time-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--secondary-color);
+}
+
+.dark-mode .time-labels {
+    color: var(--light-text);
+}
+
+.time-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-align: center;
+    display: block;
+    margin: 0.5rem 0;
+}
+
+.dark-mode .time-display {
+    color: var(--light-text);
+}
+
+/* Percentage display styles with bar charts */
+.value-percentage {
+    font-weight: bold;
+    display: inline-block;
+    font-size: 0.75em;
+    margin-left: 6px;
+    color: #666666;
+    background-color: transparent;
+    padding: 1px 3px;
+    border-radius: 2px;
+    border: none;
+}
+
+/* Responsive styles for header */
+@media (max-width: 1200px) {
+    header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .header-left, .header-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .drawer {
+        width: 100%;
+        right: -100%;
+    }
+}
+
+/* Zoom Controls */
+.zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.5rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: max-content;
+    backdrop-filter: blur(4px);
+    transition: opacity 0.3s ease;
+    margin-left: 10px;
+    z-index: 21; /* Ensure zoom controls stay on top */
+    position: sticky;
+    top: 10px;
+}
+
+.dark-mode .zoom-controls {
+    background-color: rgba(44, 48, 52, 0.8);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.zoom-btn {
+    background-color: transparent;
+    border: none;
+    color: #495057;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0;
+    font-size: 0.8rem;
+}
+
+.dark-mode .zoom-btn {
+    color: #f8f9fa;
+}
+
+.zoom-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .zoom-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#zoomLevel {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #495057;
+    width: 36px;
+    text-align: center;
+}
+
+.dark-mode #zoomLevel {
+    color: #f8f9fa;
+}
+
+.strike-header {
+    background-color: var(--light-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    width: 10%; /* Fixed width for strike price column */
+}
+
+.dark-mode .strike-header {
+    background-color: var(--dark-bg) !important;
+    border-color: #495057 !important;
+}
+
+/* ATM border - Fix to ensure it doesn't go outside table */
+.options-chain-table tr.atm-border {
+    position: relative;
+    z-index: 5;
+}
+
+/* Add specific styles for the two sides to ensure equal visibility */
+.call-header, .put-header {
+    width: 45%; /* Allocate equal width to both sides */
+}
+
+/* Ensure zoom controls stay visible on top during zoom */
+.zoom-controls {
+    position: sticky;
+    top: 10px;
+    z-index: 25;
+}
+
+/* Refresh Indicator */
+.refresh-indicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    background-color: var(--success-color);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.refresh-indicator i {
+    transition: transform 0.75s ease;
+}
+
+.refresh-indicator.refreshing i {
+    transform: rotate(360deg);
+}
+
+.dark-mode .refresh-indicator {
+    background-color: var(--primary-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ATM Highlight Effect */
+@keyframes highlight-pulse {
+    0% { background-color: transparent; }
+    50% { background-color: transparent; }
+    100% { background-color: transparent; }
+}
+
+.highlight-atm {
+    animation: none;
+    position: relative;
+    z-index: 25;
+    background-color: transparent !important;
+    transition: none;
+    box-shadow: none;
+}
+
+.dark-mode .highlight-atm {
+    animation: none;
+    background-color: transparent !important;
+    box-shadow: none;
+}
+
+/* ATM Strike Price Styles */
+.atm-strike {
+    background-color: transparent !important;
+    font-weight: normal;
+    color: inherit !important;
+    border: none !important;
+    position: relative;
+    z-index: 20;
+    box-shadow: none;
+}
+
+.dark-mode .atm-strike {
+    background-color: transparent !important;
+    color: inherit !important;
+    border: none !important;
+    box-shadow: none;
+}
+
+/* ATM Cell Styles */
+.atm-cell {
+    background-color: transparent;
+    position: relative;
+    z-index: 15;
+}
+
+.dark-mode .atm-cell {
+    background-color: transparent;
+}
+
+/* Trend indicator arrows in column headers */
+.fixed-arrow-up,
+.fixed-arrow-down {
+    margin-right: 0;
+    margin-left: 0;
+    font-size: 0.9rem;
+    vertical-align: middle;
+    color: var(--trend-up-color);
+    animation: pulse 1.5s infinite;
+    display: none;
+}
+
+.fixed-arrow-down {
+    color: var(--trend-down-color);
+}
+
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+/* Style for the trend arrows in header */
+#callVolumeHeader, #callOIHeader, #callOIChangeHeader, 
+#putVolumeHeader, #putOIHeader, #putOIChangeHeader {
+    position: relative;
+    white-space: nowrap;
+}
+
+/* Dark mode adjustments for arrows */
+.dark-mode .fixed-arrow-up {
+    color: #4cd964;
+}
+
+.dark-mode .fixed-arrow-down {
+    color: #ff3b30;
+}
+
+/* Force arrows to stay on the left */
+#callVolumeHeader span, 
+#callOIHeader span, 
+#callOIChangeHeader span,
+#putVolumeHeader span, 
+#putOIHeader span, 
+#putOIChangeHeader span {
+    float: left !important;
+    margin-right: 5px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+} 
+
+/* ATM row styling */
+.atm-border {
+    position: relative;
+    z-index: 10;
+}
+
+.atm-cell {
+    background-color: rgba(230, 57, 70, 0.15) !important;
+    font-weight: bold !important;
+}
+
+.atm-strike {
+    font-weight: bold !important;
+    color: #e63946 !important;
+    font-size: 115% !important;
+    position: relative;
+    text-shadow: 0px 0px 3px rgba(230, 57, 70, 0.3);
+}
+
+/* Optimize scrolling with hardware acceleration */
+.options-chain-container {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none; /* Prevent scroll bouncing */
+    will-change: transform; /* Hardware acceleration hint */
+    transform: translateZ(0); /* Force GPU acceleration */
+    backface-visibility: hidden; /* Reduce painting */
+    perspective: 1000px; /* 3D acceleration */
+    /* Ensure user can still scroll even if performance drops */
+    scrollbar-width: auto;
+    overflow-anchor: none;
+    /* Add new property for better scroll position memory */
+    overflow-anchor: none !important;
+    scroll-snap-type: y proximity;
+}
+
+/* Prevent layout shifts during scroll */
+body.is-scrolling .options-chain-container,
+.options-chain-container.is-scrolling {
+    overflow-anchor: none;
+    pointer-events: none;
+}
+
+/* Hardware accelerated scrolling */
+.options-chain-container:not(.is-scrolling) {
+    transition: scroll-position 0.2s ease-out;
+}
+
+/* Reduce rendering load during scroll */
+.options-chain-container.is-scrolling tbody {
+    opacity: 0.98; /* Slight transparency to reduce rendering cost */
+}
+
+/* Optimize scrollbar appearance and performance */
+.options-chain-container::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+    will-change: width;
+    transform: translateZ(0);
+}
+
+.options-chain-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 7px;
+    transform: translateZ(0);
+}
+
+.options-chain-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 7px;
+    border: 2px solid #f1f1f1;
+    transform: translateZ(0);
+}
+
+/* Add overscroll indicator */
+@keyframes scrollGlow {
+    0% { box-shadow: inset 0 5px 15px rgba(0,0,0,0); }
+    100% { box-shadow: inset 0 5px 15px rgba(0,0,0,0.2); }
+}
+
+.options-chain-container.is-scrolling {
+    animation: scrollGlow 0.3s forwards;
+}
+
+/* Flash animation for ATM highlight */
+@keyframes atm-flash {
+    0% { background-color: rgba(230, 57, 70, 0.1); }
+    50% { background-color: rgba(230, 57, 70, 0.5); }
+    100% { background-color: rgba(230, 57, 70, 0.1); }
+}
+
+.highlight-atm {
+    animation: atm-flash 1s ease-in-out 2;
+}
+
+/* Optimize table layout */
+#optionsChainTable {
+    table-layout: fixed;
+    width: 100%;
+    contain: layout style; /* Containment for performance */
+}
+
+/* Optimize tbody rendering */
+#optionsChainTable tbody {
+    position: relative;
+    contain: layout style paint; /* Containment for performance */
+}
+
+/* Fixed row height to prevent layout shifts */
+#optionsChainTable tr {
+    height: 36px; /* Set a fixed height for all rows */
+    contain: layout style; /* Containment for performance */
+}
+
+/* Optimize table cells for performance */
+#optionsChainTable td {
+    contain: content; /* Containment for performance */
+    will-change: opacity; /* Hardware acceleration hint */
+}
+
+/* Additional styling for ATM border to make it more visible */
+tr.atm-row {
+    position: relative;
+}
+
+tr.atm-row::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    background-color: #e63946;
+}
+
+tr.atm-row::after {
+    content: '';
+    position: absolute;
+    right: -10px;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    background-color: #e63946;
+}
+
+/* Optimize app container */
+.app-container {
+    transform: translateZ(0); /* Force GPU acceleration */
+    backface-visibility: hidden; /* Reduce painting */
+    perspective: 1000px; /* 3D acceleration */
+}
+
+/* Highlight the last viewed row subtly */
+.last-viewed-row {
+    position: relative;
+}
+
+.last-viewed-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background-color: #3498db;
+    opacity: 0;
+}
+
+/* Add scroll snap points for better position memory */
+#optionsChainTable tbody tr {
+    scroll-snap-align: start;
+}
+
+/* Make ATM row a stronger snap point */
+tr.atm-row {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+}
+
+/* Add a stable visual marker to ATM row */
+tr.atm-row::before,
+tr.atm-row::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 100%;
+    background-color: #e63946;
+    z-index: 100;
+}
+
+tr.atm-row::before {
+    left: -8px;
+}
+
+tr.atm-row::after {
+    right: -8px;
+}
+
+/* When scrolling, keep table cells visually stable */
+.is-scrolling #optionsChainTable td {
+    transition: none !important;
+}

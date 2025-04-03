@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options Chain Live</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Direct arrow styles */
+        .fixed-arrow-up {
+            color: #28a745;
+            display: none;
+            margin-left: 0;
+            margin-right: 0;
+            font-size: 14px;
+            font-weight: bold;
+            vertical-align: middle;
+        }
+        .fixed-arrow-down {
+            color: #dc3545;
+            display: none;
+            margin-left: 0;
+            margin-right: 0;
+            font-size: 14px;
+            font-weight: bold;
+            vertical-align: middle;
+        }
+        
+        /* Make column headers with arrows more visible */
+        th .fas {
+            font-size: 14px;
+            vertical-align: middle;
+        }
+        
+        /* Add green background to headers with up arrows */
+        th .fixed-arrow-up[style*="display: inline-block"] {
+            background-color: rgba(40, 167, 69, 0.1);
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        /* Add red background to headers with down arrows */
+        th .fixed-arrow-down[style*="display: inline-block"] {
+            background-color: rgba(220, 53, 69, 0.1);
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        /* Ensure headers with arrows have proper spacing */
+        #callOIChangeHeader span, 
+        #callOIHeader span, 
+        #callVolumeHeader span,
+        #putVolumeHeader span, 
+        #putOIHeader span, 
+        #putOIChangeHeader span {
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+        
+        /* CRITICAL: Force arrow spans to stay on the left */
+        #callOIChangeHeader span, 
+        #callOIHeader span, 
+        #callVolumeHeader span,
+        #putVolumeHeader span, 
+        #putOIHeader span, 
+        #putOIChangeHeader span {
+            float: left !important;
+            margin-right: 5px !important;
+            display: inline-block !important;
+            position: static !important;
+            left: auto !important;
+            right: auto !important;
+            top: auto !important;
+            bottom: auto !important;
+        }
+
+        /* Arrow icon placement */
+        th i.fixed-arrow-up,
+        th i.fixed-arrow-down {
+            float: none !important;
+            position: static !important;
+            left: auto !important;
+            right: auto !important;
+        }
+        
+        /* ATM row highlight */
+        tr.atm-row td:nth-child(1), /* Call IV */
+        tr.atm-row td:nth-child(2),
+        tr.atm-row td:nth-child(3),
+        tr.atm-row td:nth-child(4),
+        tr.atm-row td:nth-child(5),
+        tr.atm-row td:nth-child(6),
+        tr.atm-row td:nth-child(7),
+        tr.atm-row td:nth-child(8),
+        tr.atm-row td:nth-child(9),
+        tr.atm-row td:nth-child(10), /* Strike */
+        tr.atm-row td:nth-child(11),
+        tr.atm-row td:nth-child(12),
+        tr.atm-row td:nth-child(13),
+        tr.atm-row td:nth-child(14),
+        tr.atm-row td:nth-child(15),
+        tr.atm-row td:nth-child(16),
+        tr.atm-row td:nth-child(17),
+        tr.atm-row td:nth-child(18),
+        tr.atm-row td:nth-child(19) /* Put IV */ {
+            border-top: 1px solid red;
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="app-container">
+        <header>
+            <div class="header-left">
+                <select id="indexSelector">
+                    <option value="NIFTY">NIFTY</option>
+                    <option value="BANKNIFTY">BANK NIFTY</option>
+                </select>
+                <div class="expiry-date-selector">
+                    <select id="expiryDateSelector">
+                        <option value="current">Current Expiry</option>
+                        <!-- Expiry dates will be populated dynamically -->
+                    </select>
+                </div>
+                <div class="zoom-controls">
+                    <button id="zoomOutBtn" class="zoom-btn" title="Zoom Out">
+                        <i class="fas fa-search-minus"></i>
+                    </button>
+                    <span id="zoomLevel">100%</span>
+                    <button id="zoomInBtn" class="zoom-btn" title="Zoom In">
+                        <i class="fas fa-search-plus"></i>
+                    </button>
+                    <button id="resetZoomBtn" class="zoom-btn" title="Reset Zoom">
+                        <i class="fas fa-undo"></i>
+                    </button>
+                    <button id="scrollToATMBtn" class="zoom-btn" title="Scroll to ATM">
+                        <i class="fas fa-crosshairs"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="index-info">
+                <div class="index-value"><span id="selected-symbol">NIFTY</span>: <span id="spot-price">22,445.65</span></div>
+                <div class="change-value">
+                    <span id="price-change" class="text-success">+125.30</span>
+                    <span id="percent-change" class="text-success">(+0.56%)</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button id="historicalDataBtn">Historical Data</button>
+                <button id="themeToggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div class="options-chain-container">
+                <table id="optionsChainTable" class="options-chain-table">
+                    <thead>
+                        <tr>
+                            <th colspan="9" class="call-header">CALL</th>
+                            <th class="strike-header">Strike Price <span class="spot-price">Spot: <span id="spotPriceDisplay">22,445.65</span></span></th>
+                            <th colspan="9" class="put-header">PUT</th>
+                        </tr>
+                        <tr>
+                            <th>IV</th>
+                            <th>Delta</th>
+                            <th>Gamma</th>
+                            <th>Theta</th>
+                            <th>Vega</th>
+                            <th>LTP</th>
+                            <th id="callOIChangeHeader"><span style="float: left !important; margin-right: 5px !important; display: inline-block !important;"><i class="fas fa-arrow-up fixed-arrow-up"></i><i class="fas fa-arrow-down fixed-arrow-down"></i></span>OI Change</th>
+                            <th id="callOIHeader"><span style="float: left !important; margin-right: 5px !important; display: inline-block !important;"><i class="fas fa-arrow-up fixed-arrow-up"></i><i class="fas fa-arrow-down fixed-arrow-down"></i></span>OI</th>
+                            <th id="callVolumeHeader"><span style="float: left !important; margin-right: 5px !important; display: inline-block !important;"><i class="fas fa-arrow-up fixed-arrow-up"></i><i class="fas fa-arrow-down fixed-arrow-down"></i></span>Volume</th>
+                            <th>Strike</th>
+                            <th id="putVolumeHeader"><span style="float: left !important; margin-right: 5px !important; display: inline-block !important;"><i class="fas fa-arrow-up fixed-arrow-up"></i><i class="fas fa-arrow-down fixed-arrow-down"></i></span>Volume</th>
+                            <th id="putOIHeader"><span style="float: left !important; margin-right: 5px !important; display: inline-block !important;"><i class="fas fa-arrow-up fixed-arrow-up"></i><i class="fas fa-arrow-down fixed-arrow-down"></i></span>OI</th>
+                            <th id="putOIChangeHeader"><span style="float: left !important; margin-right: 5px !important; display: inline-block !important;"><i class="fas fa-arrow-up fixed-arrow-up"></i><i class="fas fa-arrow-down fixed-arrow-down"></i></span>OI Change</th>
+                            <th>LTP</th>
+                            <th>Vega</th>
+                            <th>Theta</th>
+                            <th>Gamma</th>
+                            <th>Delta</th>
+                            <th>IV</th>
+                        </tr>
+                    </thead>
+                    <tbody id="optionsChainBody">
+                        <!-- Options data will be populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="graphContainer" class="graph-container hidden">
+                <div class="graph-header">
+                    <div class="graph-title">Open Interest Change for Strike <span id="graphStrike"></span></div>
+                    <button id="closeGraph" class="close-graph-btn">&times;</button>
+                </div>
+                <div class="graph-canvas-container">
+                    <canvas id="oiChangeGraph"></canvas>
+                </div>
+            </div>
+        </main>
+
+        <div id="historicalDataDrawer" class="drawer">
+            <div class="drawer-header">
+                <h2>Historical Data</h2>
+                <button id="closeDrawer" class="close-drawer-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="drawer-content">
+                <div class="historical-controls">
+                    <div class="control-group">
+                        <label for="historicalDate">Date:</label>
+                        <input type="date" id="historicalDate">
+                        <label for="historicalTime">Time:</label>
+                        <input type="time" id="historicalTime">
+                        <span id="timeDisplay" class="time-display">09:00 AM</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="speedSelector">Playback Speed:</label>
+                        <select id="speedSelector">
+                            <option value="1">1x</option>
+                            <option value="2">2x</option>
+                            <option value="5">5x</option>
+                            <option value="10">10x</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <input type="range" id="timeSlider" min="0" max="390" value="0">
+                        <div class="time-labels">
+                            <span>9:00 AM</span>
+                            <span>3:30 PM</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <button id="playBtn" class="btn btn-primary">
+                            <i class="fas fa-play"></i> Play
+                        </button>
+                        <button id="pauseBtn" class="btn btn-warning">
+                            <i class="fas fa-pause"></i> Pause
+                        </button>
+                        <button id="stopBtn" class="btn btn-danger">
+                            <i class="fas fa-stop"></i> Stop
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Make trendData globally accessible 
+        window.trendData = {
+            callVolumeTrend: 'up',
+            callOITrend: 'down',
+            callOIChangeTrend: 'up',
+            putVolumeTrend: 'down',
+            putOITrend: 'up',
+            putOIChangeTrend: 'down'
+        };
+    </script>
+    <script src="js/app.js"></script>
+    <script src="js/arrow-fixer.js"></script>
+    <script>
+        // Force arrows to stay on the left immediately after page load
+        window.addEventListener('load', function() {
+            // Force update all arrow containers
+            const headerSpans = document.querySelectorAll('#callOIChangeHeader span, #callOIHeader span, #callVolumeHeader span, #putVolumeHeader span, #putOIHeader span, #putOIChangeHeader span');
+            headerSpans.forEach(span => {
+                span.style.float = 'left';
+                span.style.marginRight = '5px';
+                span.style.display = 'inline-block';
+                span.style.verticalAlign = 'middle';
+            });
+            
+            // Show some trend arrows for immediate visual feedback
+            try {
+                if (window.trendData) {
+                    // Get all headers
+                    const callVolumeHeader = document.getElementById('callVolumeHeader');
+                    const callOIHeader = document.getElementById('callOIHeader');
+                    const callOIChangeHeader = document.getElementById('callOIChangeHeader');
+                    const putVolumeHeader = document.getElementById('putVolumeHeader');
+                    const putOIHeader = document.getElementById('putOIHeader');
+                    const putOIChangeHeader = document.getElementById('putOIChangeHeader');
+                    
+                    // Update arrows with current trend data
+                    if (callVolumeHeader) {
+                        const upArrow = callVolumeHeader.querySelector('.fixed-arrow-up');
+                        if (upArrow && window.trendData.callVolumeTrend === 'up') {
+                            upArrow.style.display = 'inline-block';
+                        }
+                    }
+                    
+                    if (callOIHeader) {
+                        const downArrow = callOIHeader.querySelector('.fixed-arrow-down');
+                        if (downArrow && window.trendData.callOITrend === 'down') {
+                            downArrow.style.display = 'inline-block';
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Error in arrow init:', e);
+            }
+        });
+    </script>
+</body>
+</html>
+<!-- partial -->
+  <script  src="./script.js"></script>
+
+</body>
+</html>
